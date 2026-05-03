@@ -94,8 +94,8 @@ EOF
     -e "s/PLACEHOLDER_S8/$S8/g" \
     /etc/xray/config.json > /tmp/xray-config.json
 
-  pkill xray 2>/dev/null || true
-  sleep 1
+  pkill -SIGTERM xray 2>/dev/null || true
+  sleep 5
   xray run -config /tmp/xray-config.json &
 
   NEXT=$(( $(date +%s) + REFRESH_SECS ))
@@ -104,7 +104,8 @@ EOF
 
   sleep $REFRESH_SECS
 
-  pkill xray 2>/dev/null || true
+  pkill -SIGTERM xray 2>/dev/null || true
+  sleep 5
   MAINT_END=$(( $(date +%s) + MAINT_SECS ))
   cat > /tmp/status.json << EOF
 {"status":"maintenance","created":$START_EPOCH,"next_refresh":$MAINT_END,"duration":"$DURATION_RAW"}
