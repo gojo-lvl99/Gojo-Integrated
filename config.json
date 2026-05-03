@@ -19,13 +19,7 @@
         "network": "ws",
         "security": "none",
         "wsSettings": { "path": "/gojo/vless-ws/PLACEHOLDER_S1?ed=2180" },
-        "sockopt": {
-          "tcpFastOpen": true, 
-          "tcpNoDelay": true,
-          "tcpKeepAliveInterval": 15, 
-          "tcpKeepAliveIdle": 60,
-          "tcpCongestion": "bbr"
-        }
+        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60, "tcpCongestion": "bbr" }
       },
       "sniffing": { "enabled": false }
     },
@@ -42,13 +36,7 @@
         "network": "httpupgrade",
         "security": "none",
         "httpupgradeSettings": { "path": "/gojo/vless-hu/PLACEHOLDER_S2" },
-        "sockopt": {
-          "tcpFastOpen": true, 
-          "tcpNoDelay": true,
-          "tcpKeepAliveInterval": 15, 
-          "tcpKeepAliveIdle": 60,
-          "tcpCongestion": "bbr"
-        }
+        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60, "tcpCongestion": "bbr" }
       },
       "sniffing": { "enabled": false }
     },
@@ -58,21 +46,13 @@
       "listen": "127.0.0.1",
       "protocol": "vmess",
       "settings": {
-        "clients": [{ "id": "PLACEHOLDER_UUID", 
-          "alterId": 0, 
-          "level": 0 }]
+        "clients": [{ "id": "PLACEHOLDER_UUID", "alterId": 0, "level": 0 }]
       },
       "streamSettings": {
         "network": "ws",
         "security": "none",
         "wsSettings": { "path": "/gojo/vmess-ws/PLACEHOLDER_S3?ed=2180" },
-        "sockopt": {
-          "tcpFastOpen": true, 
-          "tcpNoDelay": true,
-          "tcpKeepAliveInterval": 15, 
-          "tcpKeepAliveIdle": 60,
-          "tcpCongestion": "bbr"
-        }
+        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60, "tcpCongestion": "bbr" }
       },
       "sniffing": { "enabled": false }
     },
@@ -82,21 +62,13 @@
       "listen": "127.0.0.1",
       "protocol": "vmess",
       "settings": {
-        "clients": [{ "id": "PLACEHOLDER_UUID", 
-          "alterId": 0, 
-          "level": 0 }]
+        "clients": [{ "id": "PLACEHOLDER_UUID", "alterId": 0, "level": 0 }]
       },
       "streamSettings": {
         "network": "httpupgrade",
         "security": "none",
         "httpupgradeSettings": { "path": "/gojo/vmess-hu/PLACEHOLDER_S4" },
-        "sockopt": {
-          "tcpFastOpen": true, 
-          "tcpNoDelay": true,
-          "tcpKeepAliveInterval": 15, 
-          "tcpKeepAliveIdle": 60,
-          "tcpCongestion": "bbr"
-        }
+        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60, "tcpCongestion": "bbr" }
       },
       "sniffing": { "enabled": false }
     },
@@ -106,20 +78,13 @@
       "listen": "127.0.0.1",
       "protocol": "trojan",
       "settings": {
-        "clients": [{ "password": "PLACEHOLDER_PASSWORD", 
-          "level": 0 }]
+        "clients": [{ "password": "PLACEHOLDER_PASSWORD", "level": 0 }]
       },
       "streamSettings": {
         "network": "ws",
         "security": "none",
         "wsSettings": { "path": "/gojo/trojan-ws/PLACEHOLDER_S5?ed=2180" },
-        "sockopt": {
-          "tcpFastOpen": true, 
-          "tcpNoDelay": true,
-          "tcpKeepAliveInterval": 15, 
-          "tcpKeepAliveIdle": 60,
-          "tcpCongestion": "bbr"
-        }
+        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60, "tcpCongestion": "bbr" }
       },
       "sniffing": { "enabled": false }
     },
@@ -129,20 +94,13 @@
       "listen": "127.0.0.1",
       "protocol": "trojan",
       "settings": {
-        "clients": [{ "password": "PLACEHOLDER_PASSWORD", 
-          "level": 0 }]
+        "clients": [{ "password": "PLACEHOLDER_PASSWORD", "level": 0 }]
       },
       "streamSettings": {
         "network": "httpupgrade",
         "security": "none",
         "httpupgradeSettings": { "path": "/gojo/trojan-hu/PLACEHOLDER_S6" },
-        "sockopt": {
-          "tcpFastOpen": true, 
-          "tcpNoDelay": true,
-          "tcpKeepAliveInterval": 15, 
-          "tcpKeepAliveIdle": 60,
-          "tcpCongestion": "bbr"
-        }
+        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60, "tcpCongestion": "bbr" }
       },
       "sniffing": { "enabled": false }
     },
@@ -163,13 +121,7 @@
         "network": "ws",
         "security": "none",
         "wsSettings": { "path": "/gojo/ss-ws/PLACEHOLDER_S7?ed=2180" },
-        "sockopt": {
-          "tcpFastOpen": true, 
-          "tcpNoDelay": true,
-          "tcpKeepAliveInterval": 15, 
-          "tcpKeepAliveIdle": 60,
-          "tcpCongestion": "bbr"
-        }
+        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60, "tcpCongestion": "bbr" }
       },
       "sniffing": { "enabled": false }
     },
@@ -190,13 +142,7 @@
         "network": "httpupgrade",
         "security": "none",
         "httpupgradeSettings": { "path": "/gojo/ss-hu/PLACEHOLDER_S8" },
-        "sockopt": {
-          "tcpFastOpen": true, 
-          "tcpNoDelay": true,
-          "tcpKeepAliveInterval": 15, 
-          "tcpKeepAliveIdle": 60,
-          "tcpCongestion": "bbr"
-        }
+        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60, "tcpCongestion": "bbr" }
       },
       "sniffing": { "enabled": false }
     }
@@ -208,11 +154,7 @@
       "protocol": "freedom",
       "settings": { "domainStrategy": "AsIs" },
       "streamSettings": {
-        "sockopt": {
-          "tcpFastOpen": true,
-          "tcpNoDelay": true,
-          "tcpCongestion": "bbr"
-        }
+        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60, "tcpCongestion": "bbr" }
       }
     },
     { "tag": "block", "protocol": "blackhole" }
