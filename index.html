@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚡ GOJO I/O</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a0a;
+      color: #e0e0e0;
+      font-family: monospace;
+      min-height: 100vh;
+    }
+
+    /* ══ LANDING ══════════════════════════════ */
+    #landing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      background: linear-gradient(160deg, #0d0018 0%, #1a0040 50%, #0d0018 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    .orb1 { width: 280px; height: 280px; background: #7c3aed; top: -60px; left: -60px; }
+    .orb2 { width: 220px; height: 220px; background: #a855f7; bottom: -40px; right: -40px; }
+
+    .l-brand { text-align: center; margin-bottom: 36px; }
+    .l-brand h1 {
+      font-size: 1.8rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #c4b5fd, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .l-brand .sub {
+      color: #6d28d9;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      margin-top: 6px;
+    }
+
+    /* TERMS BOX */
+    .terms-box {
+      background: #fff;
+      color: #111;
+      border-radius: 14px;
+      padding: 28px 22px;
+      max-width: 420px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .t-section { margin-bottom: 20px; }
+    .t-section:last-child { margin-bottom: 0; }
+
+    .t-label {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #7c3aed;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .t-text {
+      font-size: 0.76rem;
+      color: #333;
+      line-height: 1.9;
+    }
+    .t-text li {
+      list-style: none;
+      margin-bottom: 3px;
+      padding-left: 12px;
+    }
+    .t-text li::before { content: "— "; color: #7c3aed; }
+
+    .t-div {
+      border: none;
+      border-top: 1px solid #e5e5e5;
+      margin: 18px 0;
+    }
+
+    /* ACCESS BTN */
+    .access-btn {
+      max-width: 420px;
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .access-btn:active { opacity: 0.85; }
+
+    /* ══ CONFIG ROOM ══════════════════════════ */
+    #room { display: none; padding: 16px 14px 48px; }
+
+    .r-header {
+      text-align: center;
+      padding: 16px 0 18px;
+      border-bottom: 1px solid #1a1a1a;
+      margin-bottom: 14px;
+    }
+    .r-header h1 {
+      font-size: 1.3rem;
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, #c4b5fd, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .r-header .sub {
+      color: #3a3a3a;
+      font-size: 0.62rem;
+      letter-spacing: 2px;
+      margin-top: 4px;
+    }
+
+    /* STATUS CARD */
+    .scard {
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .srow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+    }
+    .sl { color: #444; font-size: 0.65rem; letter-spacing: 1px; }
+    .sv { font-size: 0.7rem; color: #7c83ff; }
+    .sv.g { color: #4ade80; }
+    .sv.y { color: #facc15; }
+
+    .dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      margin-right: 5px;
+      vertical-align: middle;
+      animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    /* CARD */
+    .card {
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .card-title {
+      color: #444;
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* VPN SETTINGS ROWS */
+    .vrow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .vrow:last-child { border-bottom: none; }
+    .vl { color: #444; font-size: 0.65rem; }
+    .vv {
+      color: #a78bfa;
+      font-size: 0.7rem;
+      text-align: right;
+      word-break: break-all;
+      max-width: 75%;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .vv.white { color: #e0e0e0; }
+    .vv.green { color: #4ade80; }
+
+    /* SELECT CONFIG */
+    .sg { margin-bottom: 10px; }
+    .sg-label {
+      color: #444;
+      font-size: 0.6rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .sg-row {
+      display: flex;
+      gap: 8px;
+    }
+    .sg-row select { flex: 1; }
+
+    select, input[type="text"] {
+      width: 100%;
+      background: #0a0a0a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      color: #a78bfa;
+      font-family: monospace;
+      font-size: 0.7rem;
+      padding: 8px 10px;
+      appearance: none;
+      outline: none;
+    }
+    select:focus, input[type="text"]:focus { border-color: #7c3aed; }
+    input::placeholder { color: #2a2a2a; }
+
+    /* PING */
+    .ping-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .ping-btn {
+      background: linear-gradient(135deg, #3b1f6e, #5b21b6);
+      border: 1px solid #7c3aed55;
+      color: #c4b5fd;
+      font-family: monospace;
+      font-size: 0.68rem;
+      padding: 7px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      letter-spacing: 1px;
+    }
+    .ping-btn:active { opacity: 0.8; }
+    .pr { font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; color: #444; }
+    .pr.good { color: #4ade80; background: #4ade8015; }
+    .pr.mid  { color: #facc15; background: #facc1515; }
+    .pr.bad  { color: #f87171; background: #f8717115; }
+
+    /* COPY BTN */
+    .cb {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      color: #7c3aed;
+      padding: 2px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.6rem;
+      font-family: monospace;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .cb:active { background: #7c3aed; color: #fff; }
+
+    /* SHARE LINK */
+    .share-box {
+      background: #0a0a0a;
+      border: 1px solid #1e1e1e;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 0.58rem;
+      color: #555;
+      word-break: break-all;
+      margin-top: 10px;
+      line-height: 1.7;
+    }
+    .copy-full {
+      width: 100%;
+      margin-top: 8px;
+      background: linear-gradient(135deg, #3b1f6e, #5b21b6);
+      border: 1px solid #7c3aed44;
+      color: #c4b5fd;
+      font-family: monospace;
+      font-size: 0.7rem;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 1px;
+    }
+    .copy-full:active { background: #7c3aed; color: #fff; }
+
+    /* CREDIT */
+    .credit {
+      text-align: center;
+      margin-top: 32px;
+      padding: 24px 14px;
+      border-top: 1px solid #1a1a1a;
+    }
+    .credit-quote {
+      color: #e0e0e0;
+      font-size: 0.82rem;
+      line-height: 2.2;
+      margin-bottom: 16px;
+    }
+    .credit-quote em { color: #a78bfa; font-style: normal; }
+    .credit-appre {
+      color: #a78bfa;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .credit-meta {
+      color: #333;
+      font-size: 0.62rem;
+      letter-spacing: 1px;
+      line-height: 2;
+    }
+    .credit-meta a { color: #3a3a3a; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<!-- ══ LANDING ══════════════════════════════ -->
+<div id="landing">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <div class="l-brand">
+    <h1>⚡ GOJO I/O</h1>
+    <div class="sub">all protocols, one exchange.</div>
+  </div>
+
+  <div class="terms-box">
+
+    <div class="t-section">
+      <div class="t-label">⚠️ Service Notice</div>
+      <div class="t-text">
+        This is a disposable proxy server.<br>
+        Credentials refresh automatically.<br>
+        No logs. No guarantees. No support.
+      </div>
+    </div>
+    <hr class="t-div">
+
+    <div class="t-section">
+      <div class="t-label">📋 Rules of Access</div>
+      <ul class="t-text">
+        <li>One config per user only.</li>
+        <li>Do not share your credentials.</li>
+        <li>Do not use for illegal activities.</li>
+        <li>Server refreshes automatically — reconnect using the latest config.</li>
+        <li>Downtime is expected and intentional.</li>
+      </ul>
+    </div>
+    <hr class="t-div">
+
+    <div class="t-section">
+      <div class="t-label">⚖️ Fair Use Policy</div>
+      <div class="t-text">
+        This server is provided as-is. Abuse will result in immediate termination without notice. Bandwidth is shared — be responsible.
+      </div>
+    </div>
+    <hr class="t-div">
+
+    <div class="t-section">
+      <div class="t-label">📜 Terms of Access</div>
+      <div class="t-text">
+        By clicking "Access Config" you agree that this service is provided without warranty. The operator is not liable for any misuse or service interruption.
+      </div>
+    </div>
+
+  </div>
+
+  <button class="access-btn" onclick="enterRoom()">[ Access Config ]</button>
+</div>
+
+<!-- ══ CONFIG ROOM ════════════════════════════ -->
+<div id="room">
+
+  <div class="r-header">
+    <h1>⚡ GOJO I/O</h1>
+    <div class="sub">all protocols, one exchange.</div>
+  </div>
+
+  <!-- STATUS -->
+  <div class="scard">
+    <div class="srow">
+      <span class="sl">STATUS</span>
+      <span class="sv g"><span class="dot"></span>ONLINE</span>
+    </div>
+    <div class="srow">
+      <span class="sl">CREATED</span>
+      <span class="sv" id="s-created">—</span>
+    </div>
+    <div class="srow">
+      <span class="sl">UPTIME</span>
+      <span class="sv g" id="s-uptime">—</span>
+    </div>
+    <div class="srow">
+      <span class="sl">REFRESHES IN</span>
+      <span class="sv y" id="s-refresh">—</span>
+    </div>
+  </div>
+
+  <!-- VPN SETTINGS -->
+  <div class="card">
+    <div class="card-title">VPN Settings</div>
+    <div class="vrow"><span class="vl">Address</span><span class="vv" id="f-addr">—</span></div>
+    <div class="vrow"><span class="vl">Port</span><span class="vv white">443</span></div>
+    <div class="vrow"><span class="vl" id="f-credlabel">UUID</span>
+      <span class="vv white" id="f-cred">— <button class="cb" onclick="copyF('f-cred')">copy</button></span>
+    </div>
+    <div class="vrow"><span class="vl">Host</span><span class="vv" id="f-host">—</span></div>
+    <div class="vrow"><span class="vl">Path</span><span class="vv" id="f-path">—</span></div>
+    <div class="vrow"><span class="vl">TLS</span><span class="vv green">ON</span></div>
+    <div class="vrow"><span class="vl">SNI</span><span class="vv" id="f-sni">—</span></div>
+  </div>
+
+  <!-- SELECT CONFIG -->
+  <div class="card">
+    <div class="card-title">Select Config</div>
+
+    <div class="sg">
+      <div class="sg-row">
+        <div style="flex:1">
+          <div class="sg-label">Protocol</div>
+          <select id="proto" onchange="updateAll()">
+            <option value="vless">VLESS</option>
+            <option value="vmess">VMess</option>
+            <option value="trojan">Trojan</option>
+            <option value="ss">Shadowsocks</option>
+          </select>
+        </div>
+        <div style="flex:1">
+          <div class="sg-label">Transport</div>
+          <select id="transport" onchange="updateAll()">
+            <option value="ws">WebSocket</option>
+            <option value="hu">HTTPUpgrade</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="sg">
+      <div class="sg-label">Address</div>
+      <select id="addrSel" onchange="onAddrChange()">
+        <option value="firebase-settings.crashlytics.com">firebase-settings.crashlytics.com ★</option>
+        <optgroup label="── Firebase / Android ──">
+          <option value="fcmregistrations.googleapis.com">fcmregistrations.googleapis.com</option>
+          <option value="fcmtoken.googleapis.com">fcmtoken.googleapis.com</option>
+          <option value="iid.googleapis.com">iid.googleapis.com</option>
+          <option value="installations.googleapis.com">installations.googleapis.com</option>
+          <option value="firebasestorage.googleapis.com">firebasestorage.googleapis.com</option>
+          <option value="firebaseremoteconfig.googleapis.com">firebaseremoteconfig.googleapis.com</option>
+          <option value="firebaserules.googleapis.com">firebaserules.googleapis.com</option>
+          <option value="firebaseinappmessaging.googleapis.com">firebaseinappmessaging.googleapis.com</option>
+          <option value="firebaseappdistribution.googleapis.com">firebaseappdistribution.googleapis.com</option>
+          <option value="firebase.googleapis.com">firebase.googleapis.com</option>
+          <option value="securetoken.googleapis.com">securetoken.googleapis.com</option>
+          <option value="app-measurement.googleapis.com">app-measurement.googleapis.com</option>
+          <option value="clients.googleapis.com">clients.googleapis.com</option>
+          <option value="clients1.google.com">clients1.google.com</option>
+          <option value="clients2.google.com">clients2.google.com</option>
+          <option value="clients3.google.com">clients3.google.com</option>
+          <option value="clients4.google.com">clients4.google.com</option>
+          <option value="clients5.google.com">clients5.google.com</option>
+          <option value="clients6.google.com">clients6.google.com</option>
+          <option value="android.clients.google.com">android.clients.google.com</option>
+          <option value="connectivitycheck.android.com">connectivitycheck.android.com</option>
+          <option value="device-messaging.googleapis.com">device-messaging.googleapis.com</option>
+          <option value="smartlock-pa.googleapis.com">smartlock-pa.googleapis.com</option>
+          <option value="cryptauth-pa.googleapis.com">cryptauth-pa.googleapis.com</option>
+        </optgroup>
+        <optgroup label="── CDN / Static ──">
+          <option value="connectivitycheck.gstatic.com">connectivitycheck.gstatic.com</option>
+          <option value="gstatic.com">gstatic.com</option>
+          <option value="www.gstatic.com">www.gstatic.com</option>
+          <option value="ssl.gstatic.com">ssl.gstatic.com</option>
+          <option value="ssl.google-analytics.com">ssl.google-analytics.com</option>
+          <option value="fonts.gstatic.com">fonts.gstatic.com</option>
+          <option value="maps.gstatic.com">maps.gstatic.com</option>
+          <option value="beacons.gvt2.com">beacons.gvt2.com</option>
+          <option value="beacons2.gvt2.com">beacons2.gvt2.com</option>
+          <option value="beacons3.gvt2.com">beacons3.gvt2.com</option>
+        </optgroup>
+        <optgroup label="── Google APIs ──">
+          <option value="ajax.googleapis.com">ajax.googleapis.com</option>
+          <option value="fonts.googleapis.com">fonts.googleapis.com</option>
+          <option value="oauth2.googleapis.com">oauth2.googleapis.com</option>
+          <option value="accounts.googleapis.com">accounts.googleapis.com</option>
+          <option value="iam.googleapis.com">iam.googleapis.com</option>
+          <option value="sts.googleapis.com">sts.googleapis.com</option>
+          <option value="cloud.googleapis.com">cloud.googleapis.com</option>
+          <option value="people.googleapis.com">people.googleapis.com</option>
+          <option value="content-autofill.googleapis.com">content-autofill.googleapis.com</option>
+          <option value="serviceusage.googleapis.com">serviceusage.googleapis.com</option>
+          <option value="cloudresourcemanager.googleapis.com">cloudresourcemanager.googleapis.com</option>
+          <option value="run.googleapis.com">run.googleapis.com</option>
+          <option value="compute.googleapis.com">compute.googleapis.com</option>
+          <option value="pubsub.googleapis.com">pubsub.googleapis.com</option>
+          <option value="firestore.googleapis.com">firestore.googleapis.com</option>
+          <option value="us-central1.googleapis.com">us-central1.googleapis.com</option>
+          <option value="clients.l.google.com">clients.l.google.com</option>
+        </optgroup>
+        <optgroup label="── Google Services ──">
+          <option value="dl.google.com">dl.google.com</option>
+          <option value="maps.google.com">maps.google.com</option>
+          <option value="play.google.com">play.google.com</option>
+          <option value="meet.google.com">meet.google.com</option>
+          <option value="cloud.google.com">cloud.google.com</option>
+          <option value="ai.google.com">ai.google.com</option>
+        </optgroup>
+        <option value="custom">✏️ Custom...</option>
+      </select>
+    </div>
+    <div class="sg" id="customAddrG" style="display:none;">
+      <div class="sg-label">Custom Address</div>
+      <input type="text" id="customAddr" placeholder="e.g. example.com" oninput="updateAll()">
+    </div>
+
+    <div class="sg">
+      <div class="sg-label">SNI</div>
+      <select id="sniSel" onchange="onSniChange()">
+        <option value="firebase-settings.crashlytics.com">firebase-settings.crashlytics.com ★</option>
+        <option value="www.maya.ph">www.maya.ph</option>
+        <option value="www.mayabank.ph">www.mayabank.ph</option>
+        <option value="www.paymaya.com">www.paymaya.com</option>
+        <option value="api.mayabank.ph">api.mayabank.ph</option>
+        <option value="api.paymaya.com">api.paymaya.com</option>
+        <option value="support.maya.ph">support.maya.ph</option>
+        <option value="fcmtoken.googleapis.com">fcmtoken.googleapis.com</option>
+        <option value="custom">✏️ Custom...</option>
+      </select>
+    </div>
+    <div class="sg" id="customSniG" style="display:none;">
+      <div class="sg-label">Custom SNI</div>
+      <input type="text" id="customSni" placeholder="e.g. example.com" oninput="updateAll()">
+    </div>
+
+    <div class="ping-row">
+      <button class="ping-btn" onclick="runPing()">⚡ Ping Test</button>
+      <span class="pr" id="pingR">—</span>
+    </div>
+  </div>
+
+  <!-- SHARE LINK -->
+  <div class="card">
+    <div class="card-title">Config Link</div>
+    <div class="share-box" id="shareLink">—</div>
+    <button class="copy-full" onclick="copyB('shareLink')">Copy Config</button>
+  </div>
+
+  <!-- CREDIT -->
+  <div class="credit">
+    <div class="credit-quote">
+      "Throughout heaven and earth,<br>
+      <em>I alone am the containerized one.</em>"
+    </div>
+    <div class="credit-appre">Credits are always appreciated. 🙏</div>
+    <div class="credit-meta">
+      ⚡ GoJo · v1.0.0 · Xray-core + nginx<br>
+      <a href="https://github.com/gojo-lvl99" target="_blank">github.com/gojo-lvl99</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let S = {};
+  const HOST = window.location.hostname;
+
+  // ── Status fetch ─────────────────────────────
+  async function fetchStatus() {
+    try {
+      const r = await fetch('/status.json?t=' + Date.now());
+      S = await r.json();
+      if (S.status === 'maintenance' || S.status === 'expired') {
+        window.location.href = '/maintenance.html';
+        return;
+      }
+      updateAll();
+    } catch(e) {}
+  }
+
+  // ── Enter room ───────────────────────────────
+  function enterRoom() {
+    document.getElementById('landing').style.display = 'none';
+    document.getElementById('room').style.display = 'block';
+    fetchStatus();
+    setInterval(fetchStatus, 30000);
+    setInterval(tick, 1000);
+    tick();
+  }
+
+  // ── Timers ───────────────────────────────────
+  function pad(n) { return String(n).padStart(2,'0'); }
+  function hms(s) {
+    if (s <= 0) return '00h : 00m : 00s';
+    return `${pad(Math.floor(s/3600))}h : ${pad(Math.floor((s%3600)/60))}m : ${pad(s%60)}s`;
+  }
+
+  function tick() {
+    const now = Math.floor(Date.now()/1000);
+    if (S.created) {
+      // CREATED — PHT
+      const d = new Date(S.created * 1000);
+      document.getElementById('s-created').textContent =
+        d.toLocaleString('en-PH', {
+          timeZone:'Asia/Manila', weekday:'short',
+          year:'numeric', month:'short', day:'2-digit',
+          hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false
+        }) + ' PHT';
+
+      // UPTIME — always up
+      document.getElementById('s-uptime').textContent = hms(now - S.created);
+    }
+    if (S.next_refresh) {
+      const rem = S.next_refresh - now;
+      document.getElementById('s-refresh').textContent =
+        S.duration === 'unli' ? hms(rem > 0 ? rem : 0) :
+        rem > 0 ? hms(rem) : 'Soon...';
+    }
+  }
+
+  // ── Selects ──────────────────────────────────
+  function onAddrChange() {
+    document.getElementById('customAddrG').style.display =
+      document.getElementById('addrSel').value === 'custom' ? 'block' : 'none';
+    updateAll();
+  }
+  function onSniChange() {
+    document.getElementById('customSniG').style.display =
+      document.getElementById('sniSel').value === 'custom' ? 'block' : 'none';
+    updateAll();
+  }
+  function getAddr() {
+    const v = document.getElementById('addrSel').value;
+    return v === 'custom' ? (document.getElementById('customAddr').value.trim() || 'custom.host') : v;
+  }
+  function getSni() {
+    const v = document.getElementById('sniSel').value;
+    return v === 'custom' ? (document.getElementById('customSni').value.trim() || 'custom.sni') : v;
+  }
+
+  // ── Update VPN fields + share link ───────────
+  function updateAll() {
+    if (!S.uuid) return;
+
+    const proto = document.getElementById('proto').value;
+    const trans = document.getElementById('transport').value;
+    const addr  = getAddr();
+    const sni   = getSni();
+    const sx    = S.suffix || {};
+    const isWS  = trans === 'ws';
+
+    // Credential
+    const isUUID = proto === 'vless' || proto === 'vmess';
+    const cred = isUUID ? S.uuid : S.password;
+    document.getElementById('f-credlabel').textContent = isUUID ? 'UUID' : 'Password';
+    document.getElementById('f-cred').childNodes[0].textContent = cred + ' ';
+
+    // Path + suffix
+    let suffix, path, link;
+    if (proto === 'vless' && isWS)        { suffix = sx.vless_ws;  path = `/gojo/vless-ws/${suffix}?ed=2180`; }
+    else if (proto === 'vless')            { suffix = sx.vless_hu;  path = `/gojo/vless-hu/${suffix}`; }
+    else if (proto === 'vmess' && isWS)   { suffix = sx.vmess_ws;  path = `/gojo/vmess-ws/${suffix}?ed=2180`; }
+    else if (proto === 'vmess')            { suffix = sx.vmess_hu;  path = `/gojo/vmess-hu/${suffix}`; }
+    else if (proto === 'trojan' && isWS)  { suffix = sx.trojan_ws; path = `/gojo/trojan-ws/${suffix}?ed=2180`; }
+    else if (proto === 'trojan')           { suffix = sx.trojan_hu; path = `/gojo/trojan-hu/${suffix}`; }
+    else if (proto === 'ss' && isWS)      { suffix = sx.ss_ws;     path = `/gojo/ss-ws/${suffix}?ed=2180`; }
+    else                                   { suffix = sx.ss_hu;     path = `/gojo/ss-hu/${suffix}`; }
+
+    const tLabel = isWS ? 'ws' : 'httpupgrade';
+    const enc = encodeURIComponent(path);
+
+    // Update VPN SETTINGS display
+    document.getElementById('f-addr').textContent = addr;
+    document.getElementById('f-host').textContent = HOST;
+    document.getElementById('f-path').textContent = path;
+    document.getElementById('f-sni').textContent  = sni;
+
+    // Generate share link
+    if (proto === 'vless') {
+      link = `vless://${S.uuid}@${addr}:443?encryption=none&security=tls&sni=${sni}&type=${tLabel}&path=${enc}&host=${HOST}#GoJo-VLESS-${trans.toUpperCase()}`;
+    } else if (proto === 'vmess') {
+      const cfg = btoa(JSON.stringify({
+        v:'2', ps:`GoJo-VMess-${trans.toUpperCase()}`,
+        add: addr, port:'443', id: S.uuid, aid:'0',
+        net: tLabel, path: path, host: HOST,
+        tls:'tls', sni: sni, type:'none'
+      }));
+      link = `vmess://${cfg}`;
+    } else if (proto === 'trojan') {
+      link = `trojan://${S.password}@${addr}:443?security=tls&sni=${sni}&type=${tLabel}&path=${enc}&host=${HOST}#GoJo-Trojan-${trans.toUpperCase()}`;
+    } else {
+      link = `ss://` + btoa(`chacha20-ietf-poly1305:${S.password}`) +
+        `@${addr}:443?plugin=v2ray-plugin%3Bmode%3D${isWS ? 'websocket' : 'httpupgrade'}%3Bhost%3D${HOST}%3Bpath%3D${enc}%3Btls#GoJo-SS-${trans.toUpperCase()}`;
+    }
+
+    document.getElementById('shareLink').textContent = link;
+  }
+
+  // ── Copy ─────────────────────────────────────
+  function copyF(id) {
+    navigator.clipboard.writeText(
+      document.getElementById(id).childNodes[0].textContent.trim()
+    );
+  }
+  function copyB(id) {
+    navigator.clipboard.writeText(document.getElementById(id).textContent.trim());
+  }
+
+  // ── Ping ─────────────────────────────────────
+  async function runPing() {
+    const el = document.getElementById('pingR');
+    el.className = 'pr'; el.textContent = 'testing...';
+    const t = Date.now();
+    try {
+      await fetch(`https://${getAddr()}/favicon.ico`, {
+        mode:'no-cors', cache:'no-store', signal: AbortSignal.timeout(8000)
+      });
+      const ms = Date.now() - t;
+      el.textContent = `✅ ${ms}ms`;
+      el.className = 'pr ' + (ms < 300 ? 'good' : ms < 700 ? 'mid' : 'bad');
+    } catch {
+      el.textContent = '❌ unreachable';
+      el.className = 'pr bad';
+    }
+  }
+</script>
+</body>
+</html>
+
