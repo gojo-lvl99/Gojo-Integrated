@@ -1,0 +1,146 @@
+{
+  "log": {
+    "loglevel": "warning",
+    "access": "none",
+    "error": "none"
+  },
+
+  "inbounds": [
+    {
+      "tag": "vless-ws-in",
+      "port": 10001,
+      "listen": "127.0.0.1",
+      "protocol": "vless",
+      "settings": {
+        "clients": [{ "id": "PLACEHOLDER_UUID", "level": 0 }],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "/gojo/vless-ws/PLACEHOLDER_S1?ed=2180"
+        },
+        "sockopt": {
+          "tcpFastOpen": true,
+          "tcpNoDelay": true,
+          "tcpKeepAliveInterval": 15,
+          "tcpKeepAliveIdle": 60,
+          "tcpCongestion": "bbr"
+        }
+      },
+      "sniffing": { "enabled": false }
+    },
+    {
+      "tag": "vless-hu-in",
+      "port": 10002,
+      "listen": "127.0.0.1",
+      "protocol": "vless",
+      "settings": {
+        "clients": [{ "id": "PLACEHOLDER_UUID", "level": 0 }],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "httpupgrade",
+        "security": "none",
+        "httpupgradeSettings": {
+          "path": "/gojo/vless-hu/PLACEHOLDER_S2"
+        },
+        "sockopt": {
+          "tcpFastOpen": true,
+          "tcpNoDelay": true,
+          "tcpKeepAliveInterval": 15,
+          "tcpKeepAliveIdle": 60,
+          "tcpCongestion": "bbr"
+        }
+      },
+      "sniffing": { "enabled": false }
+    },
+    {
+      "tag": "trojan-ws-in",
+      "port": 10003,
+      "listen": "127.0.0.1",
+      "protocol": "trojan",
+      "settings": {
+        "clients": [{ "password": "PLACEHOLDER_PASSWORD", "level": 0 }]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "/gojo/trojan-ws/PLACEHOLDER_S3?ed=2180"
+        },
+        "sockopt": {
+          "tcpFastOpen": true,
+          "tcpNoDelay": true,
+          "tcpKeepAliveInterval": 15,
+          "tcpKeepAliveIdle": 60,
+          "tcpCongestion": "bbr"
+        }
+      },
+      "sniffing": { "enabled": false }
+    },
+    {
+      "tag": "trojan-hu-in",
+      "port": 10004,
+      "listen": "127.0.0.1",
+      "protocol": "trojan",
+      "settings": {
+        "clients": [{ "password": "PLACEHOLDER_PASSWORD", "level": 0 }]
+      },
+      "streamSettings": {
+        "network": "httpupgrade",
+        "security": "none",
+        "httpupgradeSettings": {
+          "path": "/gojo/trojan-hu/PLACEHOLDER_S4"
+        },
+        "sockopt": {
+          "tcpFastOpen": true,
+          "tcpNoDelay": true,
+          "tcpKeepAliveInterval": 15,
+          "tcpKeepAliveIdle": 60,
+          "tcpCongestion": "bbr"
+        }
+      },
+      "sniffing": { "enabled": false }
+    }
+  ],
+
+  "outbounds": [
+    {
+      "tag": "direct",
+      "protocol": "freedom",
+      "settings": { "domainStrategy": "AsIs" },
+      "streamSettings": {
+        "sockopt": {
+          "tcpFastOpen": true,
+          "tcpNoDelay": true,
+          "tcpCongestion": "bbr"
+        }
+      }
+    },
+    { "tag": "block", "protocol": "blackhole" }
+  ],
+
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": []
+  },
+
+  "policy": {
+    "levels": {
+      "0": {
+        "handshake": 8,
+        "connIdle": 300,
+        "uplinkOnly": 30,
+        "downlinkOnly": 30,
+        "bufferSize": 65536
+      }
+    },
+    "system": {
+      "statsInboundUplink": false,
+      "statsInboundDownlink": false
+    }
+  }
+}
+
