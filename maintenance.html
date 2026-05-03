@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚡ GOJO I/O — Maintenance</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #0d0018;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+      font-family: monospace;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated background orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      animation: drift 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .orb1 { width: 300px; height: 300px; background: #7c3aed; top: -80px; left: -80px; animation-delay: 0s; }
+    .orb2 { width: 250px; height: 250px; background: #a855f7; bottom: -60px; right: -60px; animation-delay: -3s; }
+    .orb3 { width: 180px; height: 180px; background: #6d28d9; top: 40%; left: 60%; animation-delay: -5s; }
+
+    @keyframes drift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(20px, -20px) scale(1.05); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 360px;
+      width: 100%;
+    }
+
+    /* Icon */
+    .maint-icon {
+      font-size: 3rem;
+      margin-bottom: 24px;
+      animation: spin-slow 6s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin-slow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Brand */
+    .brand {
+      font-size: 1.4rem;
+      letter-spacing: 3px;
+      font-weight: bold;
+      background: linear-gradient(135deg, #a78bfa, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
+    .tagline {
+      color: #6d28d9;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      margin-bottom: 40px;
+    }
+
+    /* Status card */
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(167,139,250,0.2);
+      border-radius: 12px;
+      padding: 24px 20px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .status-label {
+      color: #a78bfa;
+      font-size: 0.62rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .pulse-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #facc15;
+      margin-right: 8px;
+      vertical-align: middle;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+
+    .status-text {
+      color: #facc15;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+    }
+
+    /* Countdown */
+    .countdown-label {
+      color: #555;
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .countdown {
+      font-size: 2rem;
+      letter-spacing: 4px;
+      color: #fff;
+      font-weight: bold;
+    }
+    .countdown span { color: #7c3aed; }
+
+    /* Message */
+    .message {
+      color: #666;
+      font-size: 0.7rem;
+      line-height: 2;
+      margin-top: 20px;
+    }
+    .message strong { color: #a78bfa; }
+
+    /* Footer */
+    .footer {
+      color: #2d1b69;
+      font-size: 0.6rem;
+      letter-spacing: 1px;
+      margin-top: 32px;
+      line-height: 2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <div class="container">
+    <div class="maint-icon">⚙️</div>
+
+    <div class="brand">⚡ GOJO I/O</div>
+    <div class="tagline">all protocols, one exchange.</div>
+
+    <div class="card">
+      <div class="status-label">Current Status</div>
+      <div class="status-text">
+        <span class="pulse-dot"></span>REFRESHING
+      </div>
+
+      <div class="countdown-label">Back Online In</div>
+      <div class="countdown" id="timer">
+        <span>00</span>h : <span>00</span>m : <span>00</span>s
+      </div>
+    </div>
+
+    <div class="message">
+      Server is generating <strong>new credentials</strong>.<br>
+      Return to this page after the timer ends<br>
+      to get the latest config.
+    </div>
+
+    <div class="footer">
+      ⚡ GOJO I/O · Xray-core + nginx<br>
+      Credits are always appreciated. 🙏
+    </div>
+  </div>
+
+<script>
+  async function getNextRefresh() {
+    try {
+      const r = await fetch('/status.json?t=' + Date.now());
+      const s = await r.json();
+      if (s.status === 'online') {
+        window.location.href = '/';
+        return null;
+      }
+      return s.next_refresh || null;
+    } catch(e) { return null; }
+  }
+
+  function pad(n) { return String(n).padStart(2,'0'); }
+
+  let nextRefresh = null;
+
+  async function init() {
+    nextRefresh = await getNextRefresh();
+    setInterval(tick, 1000);
+    setInterval(async () => {
+      nextRefresh = await getNextRefresh();
+    }, 15000);
+    tick();
+  }
+
+  function tick() {
+    if (!nextRefresh) return;
+    const diff = Math.floor(nextRefresh - Date.now()/1000);
+    if (diff <= 0) {
+      document.getElementById('timer').innerHTML =
+        '<span>00</span>h : <span>00</span>m : <span>00</span>s';
+      return;
+    }
+    const h = Math.floor(diff/3600);
+    const m = Math.floor((diff%3600)/60);
+    const s = diff%60;
+    document.getElementById('timer').innerHTML =
+      `<span>${pad(h)}</span>h : <span>${pad(m)}</span>m : <span>${pad(s)}</span>s`;
+  }
+
+  init();
+</script>
+</body>
+</html>
+
