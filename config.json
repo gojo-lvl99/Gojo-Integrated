@@ -9,7 +9,7 @@
     {
       "tag": "vless-ws-in",
       "port": 10001,
-      "listen": "127.0.0.1",
+      "listen": "0.0.0.0",
       "protocol": "vless",
       "settings": {
         "clients": [{ "id": "PLACEHOLDER_UUID", "level": 0 }],
@@ -26,7 +26,7 @@
     {
       "tag": "vless-hu-in",
       "port": 10002,
-      "listen": "127.0.0.1",
+      "listen": "0.0.0.0",
       "protocol": "vless",
       "settings": {
         "clients": [{ "id": "PLACEHOLDER_UUID", "level": 0 }],
@@ -43,7 +43,7 @@
     {
       "tag": "vmess-ws-in",
       "port": 10003,
-      "listen": "127.0.0.1",
+      "listen": "0.0.0.0",
       "protocol": "vmess",
       "settings": {
         "clients": [{ "id": "PLACEHOLDER_UUID", "alterId": 0, "level": 0 }]
@@ -59,7 +59,7 @@
     {
       "tag": "vmess-hu-in",
       "port": 10004,
-      "listen": "127.0.0.1",
+      "listen": "0.0.0.0",
       "protocol": "vmess",
       "settings": {
         "clients": [{ "id": "PLACEHOLDER_UUID", "alterId": 0, "level": 0 }]
@@ -75,7 +75,7 @@
     {
       "tag": "trojan-ws-in",
       "port": 10005,
-      "listen": "127.0.0.1",
+      "listen": "0.0.0.0",
       "protocol": "trojan",
       "settings": {
         "clients": [{ "password": "PLACEHOLDER_PASSWORD", "level": 0 }]
@@ -91,7 +91,7 @@
     {
       "tag": "trojan-hu-in",
       "port": 10006,
-      "listen": "127.0.0.1",
+      "listen": "0.0.0.0",
       "protocol": "trojan",
       "settings": {
         "clients": [{ "password": "PLACEHOLDER_PASSWORD", "level": 0 }]
@@ -107,7 +107,7 @@
     {
       "tag": "ss-ws-in",
       "port": 10007,
-      "listen": "127.0.0.1",
+      "listen": "0.0.0.0",
       "protocol": "shadowsocks",
       "settings": {
         "clients": [{
@@ -128,7 +128,7 @@
     {
       "tag": "ss-hu-in",
       "port": 10008,
-      "listen": "127.0.0.1",
+      "listen": "0.0.0.0",
       "protocol": "shadowsocks",
       "settings": {
         "clients": [{
