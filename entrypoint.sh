@@ -83,10 +83,10 @@ write_status "online" "$UUID" "$PASS" \
 
 # ── Start supervisord (nginx) ────────────────────────
 /usr/bin/supervisord -c /etc/supervisord.conf &
-sleep 2
+sleep 3
 
 # ── Start xray via supervisorctl ─────────────────────
-supervisorctl start xray
+supervisorctl -c /etc/supervisord.conf start xray 2>/dev/null || true
 
 # ── Refresh loop ─────────────────────────────────────
 CYCLE=1
