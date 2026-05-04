@@ -1,7 +1,5 @@
 #!/bin/sh
 
-trap '' PIPE
-
 DURATION_RAW=${DURATION:-"unli"}
 MAX_CONN=${MAX_CONN:-100}
 MAINT_SECS=3600
@@ -60,7 +58,6 @@ cat > /tmp/status.json << EOF
 }
 EOF
 }
-write_status "starting" "" "" "" "" "" "" "" "" "" "" "0"
 
 CYCLE=0
 while true; do
