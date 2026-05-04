@@ -23,20 +23,12 @@ fi
 
 sed -i "s/MAX_CONN_HERE/$MAX_CONN/g" /etc/nginx/nginx.conf
 
-/usr/bin/supervisord -c /etc/supervisord.conf &
-sleep 2
-
-START_EPOCH=$(date +%s)
-
-gen_uuid() {
-  cat /dev/urandom | tr -dc 'a-f0-9' | fold -w 32 | head -n 1 | \
-    sed 's/\(.\{8\}\)\(.\{4\}\)\(.\{4\}\)\(.\{4\}\)/\1-\2-\3-\4-/'
-}
+gen_uuid()   { cat /dev/urandom | tr -dc 'a-f0-9' | fold -w 32 | head -n 1 | sed 's/\(.\{8\}\)\(.\{4\}\)\(.\{4\}\)\(.\{4\}\)/\1-\2-\3-\4-/'; }
 gen_pass()   { cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 24 | head -n 1; }
-gen_suffix() { cat /dev/urandom | tr -dc 'a-z0-9'    | fold -w 8  | head -n 1; }
+gen_suffix() { cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 8 | head -n 1; }
 
 write_status() {
-cat > /tmp/status.json << EOF
+cat > /tmp/status.json << SEOF
 {
   "status": "$1",
   "uuid": "$2",
@@ -56,26 +48,66 @@ cat > /tmp/status.json << EOF
   "duration":     "$DURATION_RAW",
   "refresh_secs": $REFRESH_SECS
 }
-EOF
+SEOF
 }
 
-CYCLE=0
-while true; do
-  CYCLE=$(( CYCLE + 1 ))
-  NOW=$(date +%s)
+START_EPOCH=$(date +%s)
 
+# ── Generate initial credentials MUNA bago supervisord ──
+UUID=$(gen_uuid)
+PASS=$(gen_pass)
+S1=$(gen_suffix); S2=$(gen_suffix); S3=$(gen_suffix); S4=$(gen_suffix)
+S5=$(gen_suffix); S6=$(gen_suffix); S7=$(gen_suffix); S8=$(gen_suffix)
+
+sed \
+  -e "s/PLACEHOLDER_UUID/$UUID/g" \
+  -e "s/PLACEHOLDER_PASSWORD/$PASS/g" \
+  -e "s/PLACEHOLDER_S1/$S1/g" \
+  -e "s/PLACEHOLDER_S2/$S2/g" \
+  -e "s/PLACEHOLDER_S3/$S3/g" \
+  -e "s/PLACEHOLDER_S4/$S4/g" \
+  -e "s/PLACEHOLDER_S5/$S5/g" \
+  -e "s/PLACEHOLDER_S6/$S6/g" \
+  -e "s/PLACEHOLDER_S7/$S7/g" \
+  -e "s/PLACEHOLDER_S8/$S8/g" \
+  /etc/xray/config.json > /tmp/xray-config.json
+
+NEXT=$(( START_EPOCH + REFRESH_SECS ))
+write_status "online" "$UUID" "$PASS" \
+  "$S1" "$S2" "$S3" "$S4" "$S5" "$S6" "$S7" "$S8" "$NEXT"
+
+# ── Start supervisord (manages nginx + xray) ──
+/usr/bin/supervisord -c /etc/supervisord.conf &
+sleep 2
+
+# ── Refresh loop ──
+CYCLE=1
+while true; do
+  sleep $REFRESH_SECS
+
+  # Check duration expiry
   if [ "$DURATION_SECS" -gt 0 ]; then
-    ELAPSED=$(( NOW - START_EPOCH ))
+    ELAPSED=$(( $(date +%s) - START_EPOCH ))
     if [ "$ELAPSED" -ge "$DURATION_SECS" ]; then
-      pkill xray 2>/dev/null || true
-      cat > /tmp/status.json << EOF
+      cat > /tmp/status.json << SEOF
 {"status":"expired","created":$START_EPOCH,"duration":"$DURATION_RAW"}
-EOF
+SEOF
       wait
       exit 0
     fi
   fi
 
+  # Maintenance mode
+  MAINT_END=$(( $(date +%s) + MAINT_SECS ))
+  cat > /tmp/status.json << SEOF
+{"status":"maintenance","created":$START_EPOCH,"next_refresh":$MAINT_END,"duration":"$DURATION_RAW"}
+SEOF
+  pkill -SIGTERM xray 2>/dev/null || true
+  sleep 5
+  sleep $MAINT_SECS
+
+  # Generate new credentials
+  CYCLE=$(( CYCLE + 1 ))
   UUID=$(gen_uuid)
   PASS=$(gen_pass)
   S1=$(gen_suffix); S2=$(gen_suffix); S3=$(gen_suffix); S4=$(gen_suffix)
@@ -94,20 +126,10 @@ EOF
     -e "s/PLACEHOLDER_S8/$S8/g" \
     /etc/xray/config.json > /tmp/xray-config.json
 
-  trap '' PIPE
-  supervisorctl restart xray
-
   NEXT=$(( $(date +%s) + REFRESH_SECS ))
   write_status "online" "$UUID" "$PASS" \
     "$S1" "$S2" "$S3" "$S4" "$S5" "$S6" "$S7" "$S8" "$NEXT"
 
-  sleep $REFRESH_SECS
-
-  pkill -SIGTERM xray 2>/dev/null || true
-  sleep 5
-  MAINT_END=$(( $(date +%s) + MAINT_SECS ))
-  cat > /tmp/status.json << EOF
-{"status":"maintenance","created":$START_EPOCH,"next_refresh":$MAINT_END,"duration":"$DURATION_RAW"}
-EOF
-  sleep $MAINT_SECS
+  trap '' PIPE
+  supervisorctl restart xray
 done
