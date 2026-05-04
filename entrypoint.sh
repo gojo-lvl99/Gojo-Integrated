@@ -60,6 +60,7 @@ cat > /tmp/status.json << EOF
 }
 EOF
 }
+write_status "starting" "" "" "" "" "" "" "" "" "" "" "0"
 
 CYCLE=0
 while true; do
