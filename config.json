@@ -161,7 +161,7 @@
         "connIdle": 300,
         "uplinkOnly": 1,
         "downlinkOnly": 5,
-        "bufferSize": 32768
+        "bufferSize": 16384
       }
     },
     "system": {
