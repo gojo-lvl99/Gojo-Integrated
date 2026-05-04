@@ -109,7 +109,7 @@
           "method": "chacha20-ietf-poly1305",
           "level": 0
         }],
-        "network": "tcp,udp"
+        "network": "tcp"
       },
       "streamSettings": {
         "network": "ws",
@@ -129,7 +129,7 @@
           "method": "chacha20-ietf-poly1305",
           "level": 0
         }],
-        "network": "tcp,udp"
+        "network": "tcp"
       },
       "streamSettings": {
         "network": "httpupgrade",
@@ -144,7 +144,7 @@
     {
       "tag": "direct",
       "protocol": "freedom",
-      "settings": { "domainStrategy": "AsIs" }
+      "settings": { "domainStrategy": "UseIPv4" }
     },
     { "tag": "block", "protocol": "blackhole" }
   ],
@@ -161,7 +161,7 @@
         "connIdle": 300,
         "uplinkOnly": 1,
         "downlinkOnly": 5,
-        "bufferSize": 16384
+        "bufferSize": 32768
       }
     },
     "system": {
