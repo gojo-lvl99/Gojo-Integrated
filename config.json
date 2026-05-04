@@ -157,11 +157,11 @@
   "policy": {
     "levels": {
       "0": {
-        "handshake": 8,
+        "handshake": 4,
         "connIdle": 300,
-        "uplinkOnly": 30,
-        "downlinkOnly": 30,
-        "bufferSize": 65536
+        "uplinkOnly": 1,
+        "downlinkOnly": 5,
+        "bufferSize": 32768
       }
     },
     "system": {
