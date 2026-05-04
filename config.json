@@ -18,8 +18,7 @@
       "streamSettings": {
         "network": "ws",
         "security": "none",
-        "wsSettings": { "path": "/gojo/vless-ws/PLACEHOLDER_S1?ed=2180" },
-        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60 }
+        "wsSettings": { "path": "/gojo/vless-ws/PLACEHOLDER_S1?ed=2180" }
       },
       "sniffing": { "enabled": false }
     },
@@ -35,8 +34,7 @@
       "streamSettings": {
         "network": "httpupgrade",
         "security": "none",
-        "httpupgradeSettings": { "path": "/gojo/vless-hu/PLACEHOLDER_S2" },
-        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60 }
+        "httpupgradeSettings": { "path": "/gojo/vless-hu/PLACEHOLDER_S2" }
       },
       "sniffing": { "enabled": false }
     },
@@ -51,8 +49,7 @@
       "streamSettings": {
         "network": "ws",
         "security": "none",
-        "wsSettings": { "path": "/gojo/vmess-ws/PLACEHOLDER_S3?ed=2180" },
-        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60 }
+        "wsSettings": { "path": "/gojo/vmess-ws/PLACEHOLDER_S3?ed=2180" }
       },
       "sniffing": { "enabled": false }
     },
@@ -67,8 +64,7 @@
       "streamSettings": {
         "network": "httpupgrade",
         "security": "none",
-        "httpupgradeSettings": { "path": "/gojo/vmess-hu/PLACEHOLDER_S4" },
-        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60 }
+        "httpupgradeSettings": { "path": "/gojo/vmess-hu/PLACEHOLDER_S4" }
       },
       "sniffing": { "enabled": false }
     },
@@ -83,8 +79,7 @@
       "streamSettings": {
         "network": "ws",
         "security": "none",
-        "wsSettings": { "path": "/gojo/trojan-ws/PLACEHOLDER_S5?ed=2180" },
-        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60 }
+        "wsSettings": { "path": "/gojo/trojan-ws/PLACEHOLDER_S5?ed=2180" }
       },
       "sniffing": { "enabled": false }
     },
@@ -99,8 +94,7 @@
       "streamSettings": {
         "network": "httpupgrade",
         "security": "none",
-        "httpupgradeSettings": { "path": "/gojo/trojan-hu/PLACEHOLDER_S6" },
-        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60 }
+        "httpupgradeSettings": { "path": "/gojo/trojan-hu/PLACEHOLDER_S6" }
       },
       "sniffing": { "enabled": false }
     },
@@ -120,8 +114,7 @@
       "streamSettings": {
         "network": "ws",
         "security": "none",
-        "wsSettings": { "path": "/gojo/ss-ws/PLACEHOLDER_S7?ed=2180" },
-        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60 }
+        "wsSettings": { "path": "/gojo/ss-ws/PLACEHOLDER_S7?ed=2180" }
       },
       "sniffing": { "enabled": false }
     },
@@ -141,8 +134,7 @@
       "streamSettings": {
         "network": "httpupgrade",
         "security": "none",
-        "httpupgradeSettings": { "path": "/gojo/ss-hu/PLACEHOLDER_S8" },
-        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60 }
+        "httpupgradeSettings": { "path": "/gojo/ss-hu/PLACEHOLDER_S8" }
       },
       "sniffing": { "enabled": false }
     }
@@ -152,10 +144,7 @@
     {
       "tag": "direct",
       "protocol": "freedom",
-      "settings": { "domainStrategy": "AsIs" },
-      "streamSettings": {
-        "sockopt": { "tcpFastOpen": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 60 }
-      }
+      "settings": { "domainStrategy": "AsIs" }
     },
     { "tag": "block", "protocol": "blackhole" }
   ],
