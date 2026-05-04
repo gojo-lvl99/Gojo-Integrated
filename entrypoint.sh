@@ -1,5 +1,5 @@
 #!/bin/sh
-trap '' PIPE
+
 DURATION_RAW=${DURATION:-"unli"}
 MAX_CONN=${MAX_CONN:-100}
 MAINT_SECS=3600
