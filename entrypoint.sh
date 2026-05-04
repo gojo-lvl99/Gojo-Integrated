@@ -1,5 +1,7 @@
 #!/bin/sh
 
+trap '' PIPE
+
 DURATION_RAW=${DURATION:-"unli"}
 MAX_CONN=${MAX_CONN:-100}
 MAINT_SECS=3600
@@ -95,7 +97,7 @@ EOF
     /etc/xray/config.json > /tmp/xray-config.json
 
   pkill -SIGTERM xray 2>/dev/null || true
-  sleep 5
+  sleep 1
   xray run -config /tmp/xray-config.json &
 
   NEXT=$(( $(date +%s) + REFRESH_SECS ))
@@ -105,7 +107,7 @@ EOF
   sleep $REFRESH_SECS
 
   pkill -SIGTERM xray 2>/dev/null || true
-  sleep 5
+  sleep 1
   MAINT_END=$(( $(date +%s) + MAINT_SECS ))
   cat > /tmp/status.json << EOF
 {"status":"maintenance","created":$START_EPOCH,"next_refresh":$MAINT_END,"duration":"$DURATION_RAW"}
