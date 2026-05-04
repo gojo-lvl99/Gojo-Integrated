@@ -1,154 +1,111 @@
 {
-  "log": {
-    "loglevel": "warning",
-    "access": "none",
-    "error": "none"
-  },
-
+  "log": { "loglevel": "warning" },
   "inbounds": [
     {
-      "tag": "vless-ws-in",
-      "port": 10001,
-      "listen": "0.0.0.0",
-      "protocol": "vless",
+      "listen": "0.0.0.0", "port": 10001,
+      "protocol": "vless", "tag": "vless-ws",
       "settings": {
         "clients": [{ "id": "PLACEHOLDER_UUID", "level": 0 }],
         "decryption": "none"
       },
       "streamSettings": {
         "network": "ws",
-        "security": "none",
         "wsSettings": { "path": "/gojo/vless-ws/PLACEHOLDER_S1?ed=2180" }
       },
       "sniffing": { "enabled": false }
     },
     {
-      "tag": "vless-hu-in",
-      "port": 10002,
-      "listen": "0.0.0.0",
-      "protocol": "vless",
+      "listen": "0.0.0.0", "port": 10002,
+      "protocol": "vless", "tag": "vless-hu",
       "settings": {
         "clients": [{ "id": "PLACEHOLDER_UUID", "level": 0 }],
         "decryption": "none"
       },
       "streamSettings": {
         "network": "httpupgrade",
-        "security": "none",
         "httpupgradeSettings": { "path": "/gojo/vless-hu/PLACEHOLDER_S2" }
       },
       "sniffing": { "enabled": false }
     },
     {
-      "tag": "vmess-ws-in",
-      "port": 10003,
-      "listen": "0.0.0.0",
-      "protocol": "vmess",
+      "listen": "0.0.0.0", "port": 10003,
+      "protocol": "vmess", "tag": "vmess-ws",
       "settings": {
-        "clients": [{ "id": "PLACEHOLDER_UUID", "alterId": 0, "level": 0 }]
+        "clients": [{ "id": "PLACEHOLDER_UUID", "alterId": 0 }]
       },
       "streamSettings": {
         "network": "ws",
-        "security": "none",
         "wsSettings": { "path": "/gojo/vmess-ws/PLACEHOLDER_S3?ed=2180" }
       },
       "sniffing": { "enabled": false }
     },
     {
-      "tag": "vmess-hu-in",
-      "port": 10004,
-      "listen": "0.0.0.0",
-      "protocol": "vmess",
+      "listen": "0.0.0.0", "port": 10004,
+      "protocol": "vmess", "tag": "vmess-hu",
       "settings": {
-        "clients": [{ "id": "PLACEHOLDER_UUID", "alterId": 0, "level": 0 }]
+        "clients": [{ "id": "PLACEHOLDER_UUID", "alterId": 0 }]
       },
       "streamSettings": {
         "network": "httpupgrade",
-        "security": "none",
         "httpupgradeSettings": { "path": "/gojo/vmess-hu/PLACEHOLDER_S4" }
       },
       "sniffing": { "enabled": false }
     },
     {
-      "tag": "trojan-ws-in",
-      "port": 10005,
-      "listen": "0.0.0.0",
-      "protocol": "trojan",
+      "listen": "0.0.0.0", "port": 10005,
+      "protocol": "trojan", "tag": "trojan-ws",
       "settings": {
-        "clients": [{ "password": "PLACEHOLDER_PASSWORD", "level": 0 }]
+        "clients": [{ "password": "PLACEHOLDER_PASSWORD" }]
       },
       "streamSettings": {
         "network": "ws",
-        "security": "none",
         "wsSettings": { "path": "/gojo/trojan-ws/PLACEHOLDER_S5?ed=2180" }
       },
       "sniffing": { "enabled": false }
     },
     {
-      "tag": "trojan-hu-in",
-      "port": 10006,
-      "listen": "0.0.0.0",
-      "protocol": "trojan",
+      "listen": "0.0.0.0", "port": 10006,
+      "protocol": "trojan", "tag": "trojan-hu",
       "settings": {
-        "clients": [{ "password": "PLACEHOLDER_PASSWORD", "level": 0 }]
+        "clients": [{ "password": "PLACEHOLDER_PASSWORD" }]
       },
       "streamSettings": {
         "network": "httpupgrade",
-        "security": "none",
         "httpupgradeSettings": { "path": "/gojo/trojan-hu/PLACEHOLDER_S6" }
       },
       "sniffing": { "enabled": false }
     },
     {
-      "tag": "ss-ws-in",
-      "port": 10007,
-      "listen": "0.0.0.0",
-      "protocol": "shadowsocks",
+      "listen": "0.0.0.0", "port": 10007,
+      "protocol": "shadowsocks", "tag": "ss-ws",
       "settings": {
-        "clients": [{
-          "password": "PLACEHOLDER_PASSWORD",
-          "method": "chacha20-ietf-poly1305",
-          "level": 0
-        }],
+        "clients": [{ "password": "PLACEHOLDER_PASSWORD", "method": "chacha20-ietf-poly1305" }],
         "network": "tcp"
       },
       "streamSettings": {
         "network": "ws",
-        "security": "none",
         "wsSettings": { "path": "/gojo/ss-ws/PLACEHOLDER_S7?ed=2180" }
       },
       "sniffing": { "enabled": false }
     },
     {
-      "tag": "ss-hu-in",
-      "port": 10008,
-      "listen": "0.0.0.0",
-      "protocol": "shadowsocks",
+      "listen": "0.0.0.0", "port": 10008,
+      "protocol": "shadowsocks", "tag": "ss-hu",
       "settings": {
-        "clients": [{
-          "password": "PLACEHOLDER_PASSWORD",
-          "method": "chacha20-ietf-poly1305",
-          "level": 0
-        }],
+        "clients": [{ "password": "PLACEHOLDER_PASSWORD", "method": "chacha20-ietf-poly1305" }],
         "network": "tcp"
       },
       "streamSettings": {
         "network": "httpupgrade",
-        "security": "none",
         "httpupgradeSettings": { "path": "/gojo/ss-hu/PLACEHOLDER_S8" }
       },
       "sniffing": { "enabled": false }
     }
   ],
-
   "outbounds": [
-    {
-      "tag": "direct",
-      "protocol": "freedom",
-      "settings": { "domainStrategy": "AsIs" }
-    },
-    { "tag": "block", "protocol": "blackhole" }
+    { "protocol": "freedom", "tag": "direct" },
+    { "protocol": "blackhole", "tag": "block" }
   ],
-
   "routing": {
     "domainStrategy": "AsIs",
     "rules": []
