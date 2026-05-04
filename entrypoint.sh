@@ -1,5 +1,5 @@
 #!/bin/sh
-
+trap '' PIPE
 DURATION_RAW=${DURATION:-"unli"}
 MAX_CONN=${MAX_CONN:-100}
 MAINT_SECS=3600
@@ -96,6 +96,7 @@ EOF
 
   pkill -SIGTERM xray 2>/dev/null || true
   sleep 1
+  trap '' PIPE
   xray run -config /tmp/xray-config.json &
 
   NEXT=$(( $(date +%s) + REFRESH_SECS ))
