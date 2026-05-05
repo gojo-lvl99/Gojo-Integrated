@@ -78,6 +78,7 @@ sed \
 NEXT=$(( START_EPOCH + REFRESH_SECS ))
 write_status "online" "$UUID" "$PASS" \
   "$S1" "$S2" "$S3" "$S4" "$S5" "$S6" "$S7" "$S8" "$NEXT"
+supervisorctl -c /etc/supervisord.conf start xray
 
 # ── Start supervisord (nginx + xray) ────────────────
 
