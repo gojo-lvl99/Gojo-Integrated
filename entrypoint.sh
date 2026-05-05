@@ -20,7 +20,13 @@ else
   REFRESH_SECS=19800
 fi
 
+# Patch nginx MAX_CONN
 sed -i "s/MAX_CONN_HERE/$MAX_CONN/g" /etc/nginx/nginx.conf
+
+# Copy HTML files to nginx root
+mkdir -p /var/lib/nginx/html
+cp /index.html       /var/lib/nginx/html/index.html
+cp /maintenance.html /var/lib/nginx/html/maintenance.html
 
 gen_uuid()   { cat /dev/urandom | tr -dc 'a-f0-9' | fold -w 32 | head -n 1 | sed 's/\(.\{8\}\)\(.\{4\}\)\(.\{4\}\)\(.\{4\}\)/\1-\2-\3-\4-/'; }
 gen_pass()   { cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 24 | head -n 1; }
@@ -70,4 +76,4 @@ cat > /tmp/status.json << SEOF
 }
 SEOF
 
-exec /usr/bin/supervisord -c /etc/supervisord.conf
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
