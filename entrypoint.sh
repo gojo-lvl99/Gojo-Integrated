@@ -78,7 +78,7 @@ write_status "online" "$UUID" "$PASS" \
   "$S1" "$S2" "$S3" "$S4" "$S5" "$S6" "$S7" "$S8" "$NEXT"
 
 # ── Start supervisord (nginx + xray) ────────────────
-/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf &
+/usr/bin/supervisord -c /etc/supervisord.conf &
 sleep 2
 
 # ── Refresh loop ─────────────────────────────────────
