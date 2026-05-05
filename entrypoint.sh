@@ -22,10 +22,8 @@ else
   REFRESH_SECS=19800
 fi
 
-# ── Replace nginx MAX_CONN placeholder ──────────────
 sed -i "s/MAX_CONN_HERE/$MAX_CONN/g" /etc/nginx/nginx.conf
 
-# ── Helper functions ─────────────────────────────────
 gen_uuid()   { cat /dev/urandom | tr -dc 'a-f0-9' | fold -w 32 | head -n 1 | sed 's/\(.\{8\}\)\(.\{4\}\)\(.\{4\}\)\(.\{4\}\)/\1-\2-\3-\4-/'; }
 gen_pass()   { cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 24 | head -n 1; }
 gen_suffix() { cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 8 | head -n 1; }
@@ -56,13 +54,12 @@ SEOF
 
 START_EPOCH=$(date +%s)
 
-# ── Generate initial credentials ─────────────────────
+# ── Generate credentials MUNA bago supervisord ──────
 UUID=$(gen_uuid)
 PASS=$(gen_pass)
 S1=$(gen_suffix); S2=$(gen_suffix); S3=$(gen_suffix); S4=$(gen_suffix)
 S5=$(gen_suffix); S6=$(gen_suffix); S7=$(gen_suffix); S8=$(gen_suffix)
 
-# ── Inject into xray config ──────────────────────────
 sed \
   -e "s/PLACEHOLDER_UUID/$UUID/g" \
   -e "s/PLACEHOLDER_PASSWORD/$PASS/g" \
@@ -76,42 +73,40 @@ sed \
   -e "s/PLACEHOLDER_S8/$S8/g" \
   /etc/xray/config.json > /tmp/xray-config.json
 
-# ── Write initial status ─────────────────────────────
 NEXT=$(( START_EPOCH + REFRESH_SECS ))
 write_status "online" "$UUID" "$PASS" \
   "$S1" "$S2" "$S3" "$S4" "$S5" "$S6" "$S7" "$S8" "$NEXT"
 
-# ── Start supervisord (nginx) ────────────────────────
+# ── Start supervisord (nginx + xray) ────────────────
 /usr/bin/supervisord -c /etc/supervisord.conf &
-sleep 3
+sleep 2
 
 # ── Refresh loop ─────────────────────────────────────
 CYCLE=1
 while true; do
   sleep $REFRESH_SECS
 
-  # Check duration expiry
   if [ "$DURATION_SECS" -gt 0 ]; then
     ELAPSED=$(( $(date +%s) - START_EPOCH ))
     if [ "$ELAPSED" -ge "$DURATION_SECS" ]; then
       cat > /tmp/status.json << SEOF
 {"status":"expired","created":$START_EPOCH,"duration":"$DURATION_RAW"}
 SEOF
-      supervisorctl stop xray
+      pkill xray 2>/dev/null || true
       wait
       exit 0
     fi
   fi
 
-  # ── Maintenance window ──────────────────────────────
+  # Maintenance window
   MAINT_END=$(( $(date +%s) + MAINT_SECS ))
   cat > /tmp/status.json << SEOF
 {"status":"maintenance","created":$START_EPOCH,"next_refresh":$MAINT_END,"duration":"$DURATION_RAW"}
 SEOF
-  supervisorctl stop xray
+  pkill -SIGTERM xray 2>/dev/null || true
   sleep $MAINT_SECS
 
-  # ── Generate new credentials ────────────────────────
+  # Generate new credentials
   CYCLE=$(( CYCLE + 1 ))
   UUID=$(gen_uuid)
   PASS=$(gen_pass)
@@ -135,5 +130,4 @@ SEOF
   write_status "online" "$UUID" "$PASS" \
     "$S1" "$S2" "$S3" "$S4" "$S5" "$S6" "$S7" "$S8" "$NEXT"
 
-  supervisorctl start xray
 done
