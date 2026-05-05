@@ -1,6 +1,8 @@
 #!/bin/sh
 trap '' PIPE
 
+/usr/bin/supervisord -c /etc/supervisord.conf &
+sleep 2
 DURATION_RAW=${DURATION:-"unli"}
 MAX_CONN=${MAX_CONN:-100}
 MAINT_SECS=3600
@@ -78,8 +80,6 @@ write_status "online" "$UUID" "$PASS" \
   "$S1" "$S2" "$S3" "$S4" "$S5" "$S6" "$S7" "$S8" "$NEXT"
 
 # ── Start supervisord (nginx + xray) ────────────────
-/usr/bin/supervisord -c /etc/supervisord.conf &
-sleep 2
 
 # ── Refresh loop ─────────────────────────────────────
 CYCLE=1
