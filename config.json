@@ -11,6 +11,7 @@
       "streamSettings": {
         "network": "ws",
         "wsSettings": { "path": "/gojo/vless-ws/PLACEHOLDER_S1?ed=2180" }
+        "heartbeatPeriod": 30
       },
       "sniffing": { "enabled": false }
     },
@@ -36,6 +37,7 @@
       "streamSettings": {
         "network": "ws",
         "wsSettings": { "path": "/gojo/vmess-ws/PLACEHOLDER_S3?ed=2180" }
+        "heartbeatPeriod": 30
       },
       "sniffing": { "enabled": false }
     },
@@ -60,6 +62,7 @@
       "streamSettings": {
         "network": "ws",
         "wsSettings": { "path": "/gojo/trojan-ws/PLACEHOLDER_S5?ed=2180" }
+        "heartbeatPeriod": 30
       },
       "sniffing": { "enabled": false }
     },
@@ -85,6 +88,7 @@
       "streamSettings": {
         "network": "ws",
         "wsSettings": { "path": "/gojo/ss-ws/PLACEHOLDER_S7?ed=2180" }
+        "heartbeatPeriod": 30
       },
       "sniffing": { "enabled": false }
     },
