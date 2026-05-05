@@ -1,8 +1,5 @@
 #!/bin/sh
-trap '' PIPE
 
-/usr/bin/supervisord -c /etc/supervisord.conf &
-sleep 2
 DURATION_RAW=${DURATION:-"unli"}
 MAX_CONN=${MAX_CONN:-100}
 MAINT_SECS=3600
@@ -56,7 +53,7 @@ SEOF
 
 START_EPOCH=$(date +%s)
 
-# ── Generate credentials MUNA bago supervisord ──────
+# ── Generate credentials MUNA bago supervisord ──
 UUID=$(gen_uuid)
 PASS=$(gen_pass)
 S1=$(gen_suffix); S2=$(gen_suffix); S3=$(gen_suffix); S4=$(gen_suffix)
@@ -78,37 +75,37 @@ sed \
 NEXT=$(( START_EPOCH + REFRESH_SECS ))
 write_status "online" "$UUID" "$PASS" \
   "$S1" "$S2" "$S3" "$S4" "$S5" "$S6" "$S7" "$S8" "$NEXT"
-supervisorctl -c /etc/supervisord.conf start xray
 
-# ── Start supervisord (nginx + xray) ────────────────
+# ── Start supervisord — manages nginx + xray ──
+/usr/bin/supervisord -c /etc/supervisord.conf &
+sleep 3
 
-# ── Refresh loop ─────────────────────────────────────
-CYCLE=1
+# ── Refresh loop ──
 while true; do
   sleep $REFRESH_SECS
 
+  # Check duration expiry
   if [ "$DURATION_SECS" -gt 0 ]; then
     ELAPSED=$(( $(date +%s) - START_EPOCH ))
     if [ "$ELAPSED" -ge "$DURATION_SECS" ]; then
       cat > /tmp/status.json << SEOF
 {"status":"expired","created":$START_EPOCH,"duration":"$DURATION_RAW"}
 SEOF
-      pkill xray 2>/dev/null || true
       wait
       exit 0
     fi
   fi
 
-  # Maintenance window
+  # Maintenance mode
   MAINT_END=$(( $(date +%s) + MAINT_SECS ))
   cat > /tmp/status.json << SEOF
 {"status":"maintenance","created":$START_EPOCH,"next_refresh":$MAINT_END,"duration":"$DURATION_RAW"}
 SEOF
   pkill -SIGTERM xray 2>/dev/null || true
+  sleep 5
   sleep $MAINT_SECS
 
   # Generate new credentials
-  CYCLE=$(( CYCLE + 1 ))
   UUID=$(gen_uuid)
   PASS=$(gen_pass)
   S1=$(gen_suffix); S2=$(gen_suffix); S3=$(gen_suffix); S4=$(gen_suffix)
@@ -131,4 +128,6 @@ SEOF
   write_status "online" "$UUID" "$PASS" \
     "$S1" "$S2" "$S3" "$S4" "$S5" "$S6" "$S7" "$S8" "$NEXT"
 
+  trap '' PIPE
+  supervisorctl restart xray
 done
