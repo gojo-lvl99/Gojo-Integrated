@@ -43,7 +43,7 @@ gcloud run deploy gojo-io \
 ```
 
 ### Via Cloud Run Console
-1. Container image: `gojolvl99/integrated-io:latest`
+1. Container image: `hidden`
 2. Port: `8080`
 3. Set Environment Variables:
 
